@@ -7,14 +7,16 @@ const fs=require('fs')
 app.use(express.static('voices'))
 app.get('/', function (req, res) {
   const gtts = new Gtts(req.query.text, req.query.lang);
-  
+  if(!fs.existsSync(path.join(__dirname,'/voices'))){
+    fs.mkdirSync(path.join(__dirname,'/voices'));
+
+}
  if(fs.existsSync(path.join(__dirname,'/voices','speach.mp3'))){
     fs.unlink(path.join(__dirname,'/voices','speach.mp3'), (err) => {
         if (err) {
             throw err;
         }
     
-        console.log("File is deleted.");
     });
  }
   gtts.save(path.join(__dirname,'/voices','speach.mp3'),(err,result)=>{
